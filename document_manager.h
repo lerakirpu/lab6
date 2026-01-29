@@ -19,7 +19,7 @@ public:
         documents.push_back(std::move(doc));
         activeDocument = docPtr;
         
-        std::cout << "★ Документ #" << docPtr->getId() << " теперь активен" << std::endl;
+        std::cout << "Документ #" << docPtr->getId() << " теперь активен" << std::endl;
         return docPtr;
     }
     
@@ -29,11 +29,11 @@ public:
             [id](const auto& doc) { return doc->getId() == id; });
             
         if (it != documents.end()) {
-            std::cout << "🗑 Удаление документа #" << id << std::endl;
+            std::cout << "Удаление документа #" << id << std::endl;
             
             if (activeDocument == it->get()) {
                 activeDocument = nullptr;
-                std::cout << "⚠ Активный документ удален" << std::endl;
+                std::cout << "Активный документ удален" << std::endl;
             }
             
             documents.erase(it);
@@ -48,7 +48,7 @@ public:
         for (const auto& doc : documents) {
             if (doc->getId() == id) {
                 activeDocument = doc.get();
-                std::cout << "★ Активирован документ #" << id << std::endl;
+                std::cout << "Активирован документ #" << id << std::endl;
                 return true;
             }
         }
@@ -104,4 +104,4 @@ public:
     }
 };
 
-#endif // DOCUMENT_MANAGER_H
+#endif 

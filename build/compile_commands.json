@@ -1,0 +1,8 @@
+[
+{
+  "directory": "C:/Users/user/Documents/lab6/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe -IC:/Users/user/Documents/lab6/.  -D_WIN32 -g -std=gnu++17 -o CMakeFiles\\VectorEditor.dir\\main.cpp.obj -c C:\\Users\\user\\Documents\\lab6\\main.cpp",
+  "file": "C:/Users/user/Documents/lab6/main.cpp",
+  "output": "C:/Users/user/Documents/lab6/build/CMakeFiles/VectorEditor.dir/main.cpp.obj"
+}
+]

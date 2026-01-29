@@ -26,7 +26,6 @@ private:
     }
     
 public:
-    // Обработчики команд
     
     void handleNewDocument() {
         std::string name;
@@ -180,7 +179,7 @@ public:
                 case 7: handleSwitchDocument(); break;
                 case 8: handleRenderDocument(); break;
                 case 9: handleShowDocumentInfo(); break;
-                case 0: View::displayMessage("До свидания!"); break;
+                case 0: View::displayMessage; break;
                 default: View::displayError("Неверная опция"); break;
             }
             

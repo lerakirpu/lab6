@@ -7,10 +7,7 @@
 class View {
 public:
     static void displayHeader() {
-        std::cout << "\n╔════════════════════════════════════════╗" << std::endl;
-        std::cout << "║   ВЕКТОРНЫЙ ГРАФИЧЕСКИЙ РЕДАКТОР      ║" << std::endl;
-        std::cout << "║         (Архитектура MVC)            ║" << std::endl;
-        std::cout << "╚════════════════════════════════════════╝" << std::endl;
+        std::cout << "ВЕКТОРНЫЙ ГРАФИЧЕСКИЙ РЕДАКТОР" << std::endl;
     }
     
     static void displayMenu() {
@@ -39,15 +36,15 @@ public:
     }
     
     static void displayMessage(const std::string& message) {
-        std::cout << "ℹ " << message << std::endl;
+        std::cout << message << std::endl;
     }
     
     static void displaySuccess(const std::string& message) {
-        std::cout << "✓ " << message << std::endl;
+        std::cout << message << std::endl;
     }
     
     static void displayError(const std::string& message) {
-        std::cerr << "✗ ОШИБКА: " << message << std::endl;
+        std::cerr << "ОШИБКА: " << message << std::endl;
     }
     
     static void displaySeparator() {
@@ -55,4 +52,4 @@ public:
     }
 };
 
-#endif // VIEW_H
+#endif

@@ -45,4 +45,4 @@ public:
     }
 };
 
-#endif // PRIMITIVE_FACTORY_H
+#endif

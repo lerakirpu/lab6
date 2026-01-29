@@ -1,3 +1,7 @@
 # ninja log v7
-6	1855	7892469464757112	CMakeFiles/VectorEditor.dir/main.cpp.obj	743b38c78165fb3
-1861	2066	7892469483301274	VectorEditor.exe	6bf868daa4a9c887
+11	2994	7913765504871553	CMakeFiles/VectorEditor.dir/main.cpp.obj	ddec50a3eba17e72
+2996	4542	7913765534718222	VectorEditor.exe	7c592d81fe6fafdc
+15	3275	7914045724486616	CMakeFiles/VectorEditor.dir/main.cpp.obj	ddec50a3eba17e72
+3276	3661	7914045757083672	VectorEditor.exe	7c592d81fe6fafdc
+12	3092	7914047629440276	CMakeFiles/VectorEditor.dir/main.cpp.obj	ddec50a3eba17e72
+3093	3382	7914047660251377	VectorEditor.exe	7c592d81fe6fafdc

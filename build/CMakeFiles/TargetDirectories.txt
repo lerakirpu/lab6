@@ -1,4 +1,4 @@
-C:/Users/user/Documents/vtoroi/build/CMakeFiles/VectorEditor.dir
-C:/Users/user/Documents/vtoroi/build/CMakeFiles/test_build.dir
-C:/Users/user/Documents/vtoroi/build/CMakeFiles/edit_cache.dir
-C:/Users/user/Documents/vtoroi/build/CMakeFiles/rebuild_cache.dir
+C:/Users/user/Documents/lab6/build/CMakeFiles/VectorEditor.dir
+C:/Users/user/Documents/lab6/build/CMakeFiles/test_build.dir
+C:/Users/user/Documents/lab6/build/CMakeFiles/edit_cache.dir
+C:/Users/user/Documents/lab6/build/CMakeFiles/rebuild_cache.dir

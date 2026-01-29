@@ -18,18 +18,18 @@ public:
     Document(const std::string& docName = "") 
         : name(docName.empty() ? "Документ_" + std::to_string(++documentCounter) : docName),
           id(documentCounter) {
-        std::cout << "✓ Создан документ #" << id << " \"" << name << "\"" << std::endl;
+        std::cout << "Создан документ #" << id << " \"" << name << "\"" << std::endl;
     }
     
     ~Document() {
-        std::cout << "✗ Удален документ #" << id << std::endl;
+        std::cout << "Удален документ #" << id << std::endl;
     }
     
     // Добавление примитива
     void addPrimitive(std::unique_ptr<Primitive> primitive) {
         if (primitive) {
             primitives.push_back(std::move(primitive));
-            std::cout << "+ Добавлен " << primitives.back()->getName() 
+            std::cout << "Добавлен " << primitives.back()->getName() 
                       << " в документ #" << id << std::endl;
         }
     }
@@ -39,7 +39,7 @@ public:
         if (index < primitives.size()) {
             std::string name = primitives[index]->getName();
             primitives.erase(primitives.begin() + index);
-            std::cout << "- Удален " << name << " по индексу " << index 
+            std::cout << "Удален " << name << " по индексу " << index 
                       << " из документа #" << id << std::endl;
             return true;
         }
@@ -49,18 +49,18 @@ public:
     
     // Импорт из файла
     bool importFromFile(const std::string& filename) {
-        std::cout << "↓ Импорт документа #" << id << " из файла: " 
+        std::cout << "Импорт документа #" << id << " из файла: " 
                   << filename << std::endl;
         // Имитация импорта - добавляем тестовые примитивы
         addPrimitive(std::make_unique<Circle>(5, 5, 8, "Импортированный круг"));
         addPrimitive(std::make_unique<Rectangle>(10, 10, 15, 7, "Импортированный прямоугольник"));
-        std::cout << "  Импортировано " << primitives.size() << " примитивов" << std::endl;
+        std::cout << "Импортировано " << primitives.size() << " примитивов" << std::endl;
         return true;
     }
     
     // Экспорт в файл
     bool exportToFile(const std::string& filename) const {
-        std::cout << "↑ Экспорт документа #" << id << " в файл: " 
+        std::cout << "Экспорт документа #" << id << " в файл: " 
                   << filename << std::endl;
         std::cout << "  Содержит " << primitives.size() << " примитивов:" << std::endl;
         for (size_t i = 0; i < primitives.size(); ++i) {
@@ -73,7 +73,7 @@ public:
     // Очистка документа
     void clear() {
         primitives.clear();
-        std::cout << "× Очищен документ #" << id << std::endl;
+        std::cout << "Очищен документ #" << id << std::endl;
     }
     
     // Получение информации
@@ -121,4 +121,4 @@ public:
 // Инициализация статической переменной
 int Document::documentCounter = 0;
 
-#endif // DOCUMENT_H
+#endif

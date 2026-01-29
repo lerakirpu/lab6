@@ -14,7 +14,7 @@ public:
     virtual void draw() const = 0;
     virtual std::string getType() const = 0;
     virtual std::unique_ptr<Primitive> clone() const = 0;
-    virtual std::string getName() const = 0;  // Русское название
+    virtual std::string getName() const = 0; 
 };
 
 // Конкретные примитивы
@@ -132,4 +132,4 @@ public:
     }
 };
 
-#endif // PRIMITIVE_H
+#endif 
