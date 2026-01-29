@@ -30,6 +30,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
     
+    - name: Clean build directory
+      run: |
+        # Очищаем старую сборку
+        rm -rf build || true
+    
     - name: Configure CMake
       run: |
         mkdir build
@@ -92,8 +97,8 @@ jobs:
         
         ## Двоичные файлы для разных платформ:
         
-        - `VectorEditor` - Linux (64-bit)
-        - `VectorEditor.exe` - Windows (64-bit)
+        - `VectorEditor` - Linux
+        - `VectorEditor.exe` - Windows
         
         ## Как использовать:
         1. Скачайте файл для вашей операционной системы
