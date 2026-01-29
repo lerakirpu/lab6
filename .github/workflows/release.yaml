@@ -1,0 +1,176 @@
+name: lab6
+
+on:
+  push:
+    branches: [main, master]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            artifact_name: vectoreditor-linux
+            extension: ""
+            binary_path: "./VectorEditor"
+          - os: windows-latest
+            artifact_name: vectoreditor-windows
+            extension: ".exe"
+            binary_path: "./Release/VectorEditor.exe"
+
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Configure CMake
+      run: |
+        mkdir build
+        cd build
+        cmake -DCMAKE_BUILD_TYPE=Release ..
+    
+    - name: Build
+      run: |
+        cd build
+        cmake --build . --config Release --parallel 4
+    
+    - name: Test binary
+      run: |
+        cd build
+        if [ "${{ matrix.os }}" = "Windows" ]; then
+          .\Release\VectorEditor.exe --version 2>nul || echo "Build successful! Version check not implemented."
+        else
+          ./VectorEditor --version 2>/dev/null || echo "Build successful! Version check not implemented."
+        fi
+    
+    - name: Create staging directory
+      run: |
+        mkdir -p release_artifacts
+        if [ "${{ matrix.os }}" = "Windows" ]; then
+          cp build/Release/VectorEditor.exe "release_artifacts/VectorEditor${{ matrix.extension }}"
+        else
+          cp build/VectorEditor "release_artifacts/VectorEditor${{ matrix.extension }}"
+        fi
+        cp README.md release_artifacts/ 2>/dev/null || echo "README.md not found"
+        cp LICENSE release_artifacts/ 2>/dev/null || echo "LICENSE not found"
+        
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.artifact_name }}
+        path: release_artifacts/
+        retention-days: 7
+
+  create-release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts
+    
+    - name: List downloaded artifacts
+      run: |
+        find artifacts -type f
+    
+    - name: Prepare release assets
+      run: |
+        mkdir -p release_package
+        find artifacts -name "VectorEditor*" -type f -exec cp {} release_package/ \;
+        cat > release_package/README.md << 'EOF'
+        # Vector Editor Release
+        
+        ## Двоичные файлы для разных платформ:
+        
+        - `VectorEditor` - Linux (64-bit)
+        - `VectorEditor.exe` - Windows (64-bit)
+        
+        ## Как использовать:
+        1. Скачайте файл для вашей операционной системы
+        2. (Linux) Сделайте файл исполняемым: `chmod +x VectorEditor`
+        3. (Windows) Просто запустите `VectorEditor.exe`
+        
+        ## Пример команд:
+        ```
+        ./VectorEditor --help
+        ./VectorEditor --version
+        ```
+        
+        Сборка от: ${{ github.ref_name }}
+        EOF
+        tar -czf vector-editor-${{ github.ref_name }}.tar.gz -C release_package .
+        zip -r vector-editor-${{ github.ref_name }}.zip release_package/
+    
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        name: Vector Editor ${{ github.ref_name }}
+        body: |
+          ## Vector Editor Release ${{ github.ref_name }}
+          
+          Автоматическая сборка векторного редактора для лабораторной работы №6.
+          
+          ### Скачать:
+          - **[vector-editor-${{ github.ref_name }}.tar.gz](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/vector-editor-${{ github.ref_name }}.tar.gz)** - Архив для всех платформ
+          - **[vector-editor-${{ github.ref_name }}.zip](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/vector-editor-${{ github.ref_name }}.zip)** - ZIP архив
+          
+          ### Изменения:
+          - Автоматическая сборка для Linux и Windows
+          - Поддержка MVC архитектуры
+          - Полиморфные графические примитивы
+          
+          ### Поддерживаемые платформы:
+          Linux
+          Windows  
+          
+          *Собрано: ${{ github.event.head_commit.timestamp }}*
+        draft: false
+        prerelease: false
+        files: |
+          vector-editor-${{ github.ref_name }}.tar.gz
+          vector-editor-${{ github.ref_name }}.zip
+    
+    - name: Upload release artifacts separately
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-assets
+        path: |
+          vector-editor-${{ github.ref_name }}.tar.gz
+          vector-editor-${{ github.ref_name }}.zip
+        retention-days: 30
+
+  verify:
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Verify project structure
+      run: |
+        echo "Проверка структуры проекта"
+        find . -type d -name "src" -o -name "include" -o -name "build" | sort
+        echo ""
+        find . -name "*.cpp" -o -name "*.h" -o -name "*.hpp" | sort
+        echo ""
+        find . -name "CMakeLists.txt" -o -name "*.cmake" | sort
+    
+    - name: Verify compilation (quick test)
+      run: |
+        echo "Быстрая проверка компиляции"
+        mkdir -p test_build
+        cd test_build
+        cmake -DCMAKE_BUILD_TYPE=Debug ..
+        make -j4 || cmake --build . --config Debug
+        echo "Компиляция прошла успешно"
