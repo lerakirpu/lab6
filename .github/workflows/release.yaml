@@ -32,8 +32,13 @@ jobs:
     
     - name: Clean build directory
       run: |
-        # Очищаем старую сборку
-        rm -rf build || true
+        if [ "${{ matrix.os }}" = "Windows" ]; then
+          # Windows PowerShell
+          Remove-Item -Recurse -Force build -ErrorAction SilentlyContinue
+        else
+          # Linux
+          rm -rf build
+        fi
     
     - name: Configure CMake
       run: |
@@ -57,14 +62,17 @@ jobs:
     
     - name: Create staging directory
       run: |
-        mkdir -p release_artifacts
         if [ "${{ matrix.os }}" = "Windows" ]; then
-          cp build/Release/VectorEditor.exe "release_artifacts/VectorEditor${{ matrix.extension }}"
+          mkdir release_artifacts
+          copy build\Release\VectorEditor.exe "release_artifacts\VectorEditor${{ matrix.extension }}"
+          copy README.md release_artifacts\ 2>nul || echo "README.md not found"
+          copy LICENSE release_artifacts\ 2>nul || echo "LICENSE not found"
         else
+          mkdir -p release_artifacts
           cp build/VectorEditor "release_artifacts/VectorEditor${{ matrix.extension }}"
+          cp README.md release_artifacts/ 2>/dev/null || echo "README.md not found"
+          cp LICENSE release_artifacts/ 2>/dev/null || echo "LICENSE not found"
         fi
-        cp README.md release_artifacts/ 2>/dev/null || echo "README.md not found"
-        cp LICENSE release_artifacts/ 2>/dev/null || echo "LICENSE not found"
         
     - name: Upload build artifact
       uses: actions/upload-artifact@v4
@@ -97,7 +105,7 @@ jobs:
         
         ## Двоичные файлы для разных платформ:
         
-        - `VectorEditor` - Linux
+        - `VectorEditor` - Linux 
         - `VectorEditor.exe` - Windows
         
         ## Как использовать:
